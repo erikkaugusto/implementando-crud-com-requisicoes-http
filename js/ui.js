@@ -2,7 +2,7 @@ import api from "./api.js";
 
 const ui = {
 
-    async preencherFormular(pensamentoId){
+    async preencherFormulario(pensamentoId){
         const pensamento = await api.buscarPensamentoPorId(pensamentoId);
         document.getElementById("pensamento-id").value = pensamento.id;
         document.getElementById("pensamento-conteudo").value = pensamento.conteudo;
@@ -15,6 +15,7 @@ const ui = {
 
     async renderizarPensamentos() {
         const listaPensamentos = document.getElementById("lista-pensamentos");
+        listaPensamentos.innerHTML = "";
 
         try {
             const pensamentos = await api.buscarPensamentos();
@@ -45,16 +46,33 @@ const ui = {
 
         const botaoEditar = document.createElement("button");
         botaoEditar.classList.add("botao-editar");
-        botaoEditar.onclick = () => ui.preencherFormular(pensamento.id);
+        botaoEditar.onclick = () => ui.preencherFormulario(pensamento.id);
 
         const iconeEditar = document.createElement("img");
         iconeEditar.src = "assets/imagens/icone-editar.png";
         iconeEditar.alt = "Editar";
         botaoEditar.appendChild(iconeEditar);
 
+        const botaoExcluir = document.createElement("button");
+        botaoExcluir.classList.add("botao-excluir");
+        botaoExcluir.onclick = async () => {
+            try {
+                await api.excluirPensamento(pensamento.id);
+                ui.renderizarPensamentos();
+            } catch (error) {
+                alert("Erro ao excluir pensamento");
+            }
+        }
+
+        const iconeExcluir = document.createElement("img");
+        iconeExcluir.src = "assets/imagens/icone-excluir.png";
+        iconeExcluir.alt = "Excluir";
+        botaoExcluir.appendChild(iconeExcluir);        
+
         const icones = document.createElement("div");
         icones.classList.add("icones");
         icones.appendChild(botaoEditar);
+        icones.appendChild(botaoExcluir);
 
         li.appendChild(iconeAspas);
         li.appendChild(pensamentoConteudo);
