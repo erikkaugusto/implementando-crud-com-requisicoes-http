@@ -24,8 +24,8 @@ const api = {
     async buscarPensamentoPorId(id) {
         try {
             const response = await axios.get(`${URL_BASE}/pensamentos/${id}`);
-            return await response.json();
-        } catch (error) {
+            return await response.data;
+        } catch {
             alert('Erro ao buscar pensamento');
             throw error;
         }
@@ -33,15 +33,9 @@ const api = {
 
     async editarPensamento(pensamento) {
         try {
-            const response = await axios.get(`${URL_BASE}/pensamentos/${pensamento.id}`, {
-                method: "PUT", // Método para editar 
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(pensamento)
-            });
-            return await response.json();
-        } catch (error) {
+            const response = await axios.put(`${URL_BASE}/pensamentos/${pensamento.id}`, pensamento);
+            return await response.data;
+        } catch {
             alert('Erro ao editar pensamento');
             throw error;
         }
@@ -49,10 +43,8 @@ const api = {
 
     async excluirPensamento(id) {
         try {
-            const response = await fetch(`${URL_BASE}/pensamentos/${id}`, {
-                method: "DELETE", // Método para deletar 
-            });
-        } catch (error) {
+            const response = await axios.delete(`${URL_BASE}/pensamentos/${id}`);
+        } catch {
             alert('Erro ao excluir pensamento');
             throw error;
         }
